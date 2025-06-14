@@ -118,7 +118,7 @@ const options = {
 }
 
 const ContentfulRichTech = ({ richText }) => {
-  return <div>{renderRichText(richText, options)}</div>
+  return <div className="max-w-3xl mx-auto">{renderRichText(richText, options)}</div>
 }
 
 ContentfulRichTech.propTypes = {

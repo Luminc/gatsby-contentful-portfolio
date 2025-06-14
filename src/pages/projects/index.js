@@ -11,8 +11,8 @@ const ProjectPage = ({ data }) => {
       <Container>
         <div className="card-columns">
           {data.allContentfulProject.nodes.map(project => (
-            <div className="card">
-              <Link to={`/projects/${project.url}`} key={project.id}>
+            <div className="card" key={project.id}>
+              <Link to={`/projects/${project.url}`}>
                 <GatsbyImage
                   className="card-img"
                   image={project.featuredImage.gatsbyImageData}
@@ -21,7 +21,7 @@ const ProjectPage = ({ data }) => {
               </Link>
 
               <div className="card-body">
-                <Link to={`/projects/${project.url}`} key={project.id}>
+                <Link to={`/projects/${project.url}`}>
                   <p className="overline">
                     {project.medium} — {project.year}
                   </p>
@@ -56,7 +56,7 @@ export const query = graphql`
 
 export const Head = () => (
   <Seo
-    title="Landing page"
+    title="Projects"
     description="Jeroen Kortekaas, (1991, NL) is an interdisciplinary artist working with a practice that shifts between psychogeography, research, drawing, sculpture, and assemblage."
     keywords="Artist, Sculpture, Network, Animism, Agency "
   />

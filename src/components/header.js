@@ -32,6 +32,11 @@ export const Header = () => {
             Projects
           </Link>
         </div>
+        <div className="nav-links-item">
+          <Link to="/blog" className="nav-links-text">
+            Blog
+          </Link>
+        </div>
         {data.allContentfulPage.edges.map(item => (
           <div key={item.node.slug} className="nav-links-item">
             <Link to={`/${item.node.slug}`} className="nav-links-text">

@@ -38,6 +38,9 @@ export const Footer = () => {
           <li className="footer-links-item">
             <Link to="/projects">Projects</Link>
           </li>
+          <li className="footer-links-item">
+            <Link to="/blog">Blog</Link>
+          </li>
 
           {data.allContentfulPage.edges.map(item => (
             <li className="footer-links-item" key={item.node.slug}>
@@ -126,6 +129,10 @@ export const Footer = () => {
                 <div className="py-4">
                   <div className="d-inline">
                     <Link to="/projects">PROJECTS</Link>
+                  </div>
+                  {" | "}
+                  <div className="d-inline">
+                    <Link to="/blog">BLOG</Link>
                   </div>
                   {" | "}
                   {data.allContentfulPage.edges.map(item => (

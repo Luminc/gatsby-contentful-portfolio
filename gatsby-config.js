@@ -7,8 +7,8 @@ module.exports = {
   siteMetadata: {
     title: `Jeroen Kortekaas`,
     author: `Jeroen Kortekaas`,
-    keywords: `"Art, Sculpture, Network, Animism, Agency, Entheogens, Craft`,
-    description: `Jeroen Kortekaas, (1991, NL) is an interdisciplinary artist working with a practice that shifts between psychogeography, research, drawing, sculpture, and assemblage.`,
+    keywords: `"Art, Sculpture, Metaxu, Contemplative Research, Devotional Craft, Drawing, Assemblage, Network, Animism, Agency, Infrastructure, Machinic Animism, Philosophy, Contemporary Art, Installation, Interdisciplinary Art, Dutch Artist, Nature-Technology, Autonomy, Distributed Agency"`,
+    description: `Jeroen Kortekaas (1991, NL) is an artist whose practice weds contemplative research with the devotional craft of sculpture, drawing, and assemblage. His work explores the metaxu—the dynamic and often equivocal "between" where self and world, nature and technology, agency and passivity meet.`,
     siteUrl: `https://www.jeroenkortekaas.com`,
     eMail: `studio@jeroenkortekaas.com`,
     insta: `https://www.instagram.com/bluecarabiner`,
