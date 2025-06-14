@@ -1,76 +1,187 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { ContentfulRichText } from './contentful-rich-text';
 import styled from 'styled-components';
 
-const StyledContainer = styled(Container)`
-  ${props => props.width === 'narrow' && 'max-width: 768px;'}
-  ${props => props.width === 'medium' && 'max-width: 992px;'}
-  ${props => props.width === 'wide' && 'max-width: 1200px;'}
-  ${props => props.width === 'full' && 'max-width: 100%;'}
+const StyledSection = styled.div`
+  background-color: ${props => props.backgroundColor || 'transparent'};
+  color: ${props => props.textColor || 'inherit'};
+  padding: ${props => {
+    switch (props.padding) {
+      case 'none': return '0';
+      case 'small': return '1rem';
+      case 'medium': return '2rem';
+      case 'large': return '4rem';
+      default: return '2rem';
+    }
+  }};
+  margin: ${props => {
+    switch (props.margin) {
+      case 'none': return '0';
+      case 'small': return '1rem 0';
+      case 'medium': return '2rem 0';
+      case 'large': return '4rem 0';
+      default: return '2rem 0';
+    }
+  }};
 `;
 
-const StyledRow = styled(Row)`
-  ${props => props.spacing === 'tight' && 'margin-bottom: 1rem;'}
-  ${props => props.spacing === 'normal' && 'margin-bottom: 2rem;'}
-  ${props => props.spacing === 'loose' && 'margin-bottom: 3rem;'}
+const ImageWrapper = styled.div`
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
 `;
 
-const StyledCol = styled(Col)`
-  ${props => props.alignment === 'left' && 'text-align: left;'}
-  ${props => props.alignment === 'center' && 'text-align: center;'}
-  ${props => props.alignment === 'right' && 'text-align: right;'}
+const VideoWrapper = styled.div`
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
-const FlexibleLayout = ({ 
-  sections, 
-  defaultWidth = 'medium',
-  defaultSpacing = 'normal',
-  defaultAlignment = 'left'
-}) => {
-  return (
-    <StyledContainer fluid={defaultWidth === 'full'} width={defaultWidth}>
-      {sections.map((section, index) => {
-        const {
-          layout = 'full',
-          width = defaultWidth,
-          spacing = defaultSpacing,
-          alignment = defaultAlignment,
-          columnSpan = 1,
-          children
-        } = section;
+const QuoteWrapper = styled.blockquote`
+  font-size: ${props => props.style === 'large' ? '2rem' : '1.5rem'};
+  font-style: italic;
+  margin: 2rem 0;
+  padding: ${props => props.style === 'pullquote' ? '0 2rem' : '0'};
+  border-left: ${props => props.style === 'pullquote' ? '4px solid #ccc' : 'none'};
+  
+  cite {
+    display: block;
+    font-size: 1rem;
+    margin-top: 1rem;
+    font-style: normal;
+  }
+`;
 
-        // Calculate column sizes based on layout
-        const getColumnSizes = () => {
-          switch (layout) {
-            case 'two-column':
-              return { xs: 12, md: 6 };
-            case 'three-column':
-              return { xs: 12, md: 4 };
-            case 'split':
-              return { xs: 12, md: columnSpan === 2 ? 8 : 4 };
-            default:
-              return { xs: 12 };
-          }
-        };
+const GalleryWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+  
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+`;
 
+export const FlexibleLayout = ({ sections }) => {
+  const renderContent = (section) => {
+    const { type, content } = section;
+
+    switch (type) {
+      case 'text':
+        return <ContentfulRichText content={content.text} />;
+      
+      case 'image':
         return (
-          <StyledRow 
-            key={section.id || index} 
-            spacing={spacing}
-            className={`mb-${spacing}`}
-          >
-            <StyledCol 
-              {...getColumnSizes()} 
-              alignment={alignment}
-              className={`col-span-${columnSpan}`}
-            >
-              {children}
-            </StyledCol>
-          </StyledRow>
+          <ImageWrapper>
+            <img 
+              src={content.image.url} 
+              alt={content.image.title || ''} 
+              loading="lazy"
+            />
+          </ImageWrapper>
         );
-      })}
-    </StyledContainer>
-  );
-};
+      
+      case 'video':
+        return (
+          <VideoWrapper>
+            <iframe
+              src={content.video.url}
+              title={content.video.title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </VideoWrapper>
+        );
+      
+      case 'gallery':
+        return (
+          <GalleryWrapper>
+            {content.gallery.map((image, index) => (
+              <img 
+                key={index}
+                src={image.url} 
+                alt={image.title || `Gallery image ${index + 1}`}
+                loading="lazy"
+              />
+            ))}
+          </GalleryWrapper>
+        );
+      
+      case 'quote':
+        return (
+          <QuoteWrapper style={content.quote.style}>
+            {content.quote.text}
+            {content.quote.author && <cite>— {content.quote.author}</cite>}
+          </QuoteWrapper>
+        );
+      
+      case 'embed':
+        return (
+          <div className="embed-wrapper">
+            <iframe
+              src={content.embed.url}
+              title="Embedded content"
+              frameBorder="0"
+              allowFullScreen
+            />
+          </div>
+        );
+      
+      default:
+        return null;
+    }
+  };
 
-export default FlexibleLayout; 
+  const getColumnWidth = (layout) => {
+    switch (layout) {
+      case 'two-column':
+        return 6;
+      case 'three-column':
+        return 4;
+      default:
+        return 12;
+    }
+  };
+
+  return (
+    <Container>
+      {sections.map((section, index) => (
+        <StyledSection
+          key={index}
+          backgroundColor={section.styling?.backgroundColor}
+          textColor={section.styling?.textColor}
+          padding={section.styling?.padding}
+          margin={section.styling?.margin}
+        >
+          <Row>
+            {section.layout === 'grid' ? (
+              <Col xs={12}>
+                {renderContent(section)}
+              </Col>
+            ) : (
+              <Col md={getColumnWidth(section.layout)}>
+                {renderContent(section)}
+              </Col>
+            )}
+          </Row>
+        </StyledSection>
+      ))}
+    </Container>
+  );
+}; 

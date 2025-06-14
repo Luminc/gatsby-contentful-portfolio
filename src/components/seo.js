@@ -1,38 +1,50 @@
-import * as React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useSiteMetadata } from "../hooks/use-site-metadata";
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { useStaticQuery, graphql } from 'gatsby';
 
-const Seo = ({ title, description, keywords, pathname, children }) => {
-  const {
-    brand: defaultTitle,
-    description: defaultDescription,
-    siteUrl,
-    twitterUsername,
-  } = useSiteMetadata();
+export const SEO = ({ title, description, image }) => {
+  const { site } = useStaticQuery(
+    graphql`
+      query {
+        site {
+          siteMetadata {
+            title
+            description
+            siteUrl
+            keywords
+          }
+        }
+      }
+    `
+  );
+
+  const defaultTitle = site.siteMetadata.title;
+  const defaultDescription = site.siteMetadata.description;
+  const defaultImage = `${site.siteMetadata.siteUrl}/default-og-image.jpg`;
+
   const seo = {
-    title: title,
-    brand: defaultTitle,
+    title: title || defaultTitle,
     description: description || defaultDescription,
-    url: `${siteUrl}${pathname || ``}`,
-    twitterUsername,
+    image: image || defaultImage,
   };
 
-  const { siteMetadata } = useSiteMetadata();
-
   return (
-    <>
-      <title>
-        {title} — {siteMetadata.title}
-      </title>
+    <Helmet>
+      <title>{seo.title}</title>
+      <meta name="description" content={seo.description} />
+      <meta name="keywords" content={site.siteMetadata.keywords} />
+      
+      {/* Open Graph */}
+      <meta property="og:title" content={seo.title} />
+      <meta property="og:description" content={seo.description} />
+      <meta property="og:image" content={seo.image} />
+      <meta property="og:type" content="website" />
+      
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="description" content={siteMetadata.description} />
-      <meta name="twitter:creator" content={seo.twitterUsername} />
-      <meta name="twitter:description" content={seo.description} />
-      <meta name="twitter:url" content={seo.url} />
       <meta name="twitter:title" content={seo.title} />
-      <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    </>
+      <meta name="twitter:description" content={seo.description} />
+      <meta name="twitter:image" content={seo.image} />
+    </Helmet>
   );
 };
-
-export default Seo;

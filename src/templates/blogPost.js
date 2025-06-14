@@ -1,148 +1,93 @@
-import React from "react";
-import { graphql } from "gatsby";
-import Layout from "../components/layout";
-import Seo from "../components/seo";
-import { GatsbyImage, getImage } from "gatsby-plugin-image";
-import Container from "react-bootstrap/Container";
-import ContentLayout from "../components/content-layout";
+import React from 'react';
+import { graphql } from 'gatsby';
+import { Container } from 'react-bootstrap';
+import { FlexibleLayout } from '../components/flexible-layout';
+import { SEO } from '../components/seo';
+import { Layout } from '../components/layout';
 
 const BlogPost = ({ data }) => {
-  const image = getImage(data.contentfulBlogPost.featuredImage.gatsbyImageData);
-
-  // Transform blog post content into the shared layout format
-  const transformContent = (post) => {
-    const sections = [];
-
-    // Add featured image as first section if it exists
-    if (post.featuredImage) {
-      sections.push({
-        __typename: "ContentfulImageSection",
-        id: "featured-image",
-        layout: "full",
-        width: "wide",
-        alignment: "center",
-        image: post.featuredImage,
-        aspectRatio: "auto"
-      });
-    }
-
-    // Add main content as text section
-    if (post.content) {
-      sections.push({
-        __typename: "ContentfulTextSection",
-        id: "main-content",
-        layout: "full",
-        width: "medium",
-        alignment: "left",
-        content: post.content
-      });
-    }
-
-    // Add any additional sections
-    if (post.sections) {
-      sections.push(...post.sections);
-    }
-
-    return sections;
-  };
+  const { contentfulBlogPost } = data;
+  const { title, sections, date } = contentfulBlogPost;
 
   return (
-    <Layout pageTitle={data.contentfulBlogPost.title}>
-      <Container fluid="xxl">
-        <h1 className="text-center display-1 py-2">
-          {data.contentfulBlogPost.title}
-        </h1>
-        <p className="text-center project-subtitle pb-5">
-          {new Date(data.contentfulBlogPost.publishDate).toLocaleDateString()}
+    <Layout>
+      <SEO title={title} />
+      <Container>
+        <h1 className="display-4 mb-4">{title}</h1>
+        <p className="text-muted mb-5">
+          {new Date(date).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
         </p>
+        <FlexibleLayout sections={sections} />
       </Container>
-
-      <ContentLayout
-        content={transformContent(data.contentfulBlogPost)}
-        defaultWidth="medium"
-        defaultSpacing="normal"
-      />
     </Layout>
   );
 };
 
-export const data = graphql`
-  query ($id: String) {
+export const query = graphql`
+  query BlogPostQuery($id: String!) {
     contentfulBlogPost(id: { eq: $id }) {
+      # Inherited fields from Base Content
       title
-      publishDate
-      featuredImage {
-        gatsbyImageData(layout: FULL_WIDTH)
+      slug
+      seo {
+        title
         description
+        image {
+          url
+        }
       }
-      content {
-        raw
+      # Blog Post specific fields
+      date
+      author
+      featuredImage {
+        url
+        title
       }
+      # Sections from Base Content
       sections {
-        __typename
-        ... on ContentfulTextSection {
-          id
-          layout
-          width
-          alignment
-          columnSpan
-          content {
+        type
+        layout
+        content {
+          text {
             raw
           }
-        }
-        ... on ContentfulImageSection {
-          id
-          layout
-          width
-          alignment
-          columnSpan
-          aspectRatio
           image {
-            gatsbyImageData
+            url
+            title
           }
-          title
-          alt
-        }
-        ... on ContentfulMediaSection {
-          id
-          layout
-          width
-          alignment
-          columnSpan
-          columns
-          spacing
-          media {
-            __typename
-            ... on ContentfulImage {
-              id
-              title
-              gatsbyImageData
-            }
-            ... on ContentfulVideo {
-              id
-              url
-              title
-              muted
-            }
-            ... on ContentfulCarousel {
-              id
-              interval
-              pause
-              controls
-              indicators
-              title
-              images {
-                id
-                gatsbyImageData
-              }
-            }
+          video {
+            url
+            title
+            autoplay
+          }
+          gallery {
+            url
+            title
+          }
+          quote {
+            text
+            author
+            style
+          }
+          embed {
+            url
+            type
           }
         }
+        styling {
+          backgroundColor
+          textColor
+          padding
+          margin
+        }
+        order
       }
     }
   }
 `;
-
-export const Head = ({ data }) => <Seo title={data.contentfulBlogPost.title} />;
 
 export default BlogPost; 
