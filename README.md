@@ -1,60 +1,219 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby Contentful Portfolio
-</h1>
+# Jeroen Kortekaas Portfolio
 
-## About
+A modern, flexible portfolio website built with Gatsby and Contentful, designed to showcase artistic work with a focus on content flexibility and responsive design.
 
-This is an artist portfolio website using Gatsby. Data is sourced from contentful and the website uses conditional rendering in order for project pages to have components that can be added and ordered directly from the CMS. This means the owner has more control over how project pages are rendered, allowing more creative freedom. I create content model using Contentful's reference features to make pages composeable directly from the CMS. In the front-end, we check which content types are present and render them to the page.
+## 🎨 Features
 
-In the finished state, each component on the website will be able to be controlled and changed based on the users desires. New pages can also be added without any changes to the front-end.
+- **Flexible Content Layout System**
+  - Modular content sections
+  - Multiple layout options (full, two-column, three-column, split)
+  - Responsive design for all screen sizes
+  - Customizable width and alignment options
 
-## 🚀 Quick start
+- **Content Types**
+  - Projects
+  - Blog Posts
+  - Pages
+  - All content types support:
+    - Rich text content
+    - Media galleries
+    - Videos
+    - Carousels
+    - Custom layouts
 
-1.  **Create a Gatsby site.**
+- **Technical Features**
+  - Built with Gatsby for optimal performance
+  - Contentful CMS integration
+  - Responsive images with Gatsby Image
+  - SEO optimization
+  - Progressive Web App capabilities
 
-    Use the Gatsby CLI to create a new site, specifying the minimal starter.
+## 🏗 Architecture
 
-    ```shell
-    # create a new Gatsby site using the minimal starter
-    npm init gatsby
-    ```
+### Content Structure
 
-2.  **Start developing.**
+The project uses a flexible content model in Contentful that allows for:
 
-    Navigate into your new site’s directory and start it up.
+1. **Base Content Type**
+   - Title
+   - Featured Image
+   - Flexible Sections
 
-    ```shell
-    cd my-gatsby-site/
-    npm run develop
-    ```
+2. **Section Types**
+   - Text Sections
+   - Image Sections
+   - Media Sections (images, videos, carousels)
+   - Each section supports:
+     - Custom layouts
+     - Width options
+     - Alignment settings
+     - Column spans
 
-3.  **Open the code and start customizing!**
+3. **Content Types**
+   - Projects
+   - Blog Posts
+   - Pages
+   - Each extends the base content type with specific fields
 
-    Your site is now running at http://localhost:8000!
+### Code Structure
 
-    Edit `src/pages/index.js` to see your site update in real-time!
+```
+src/
+├── components/
+│   ├── content-layout.js     # Flexible layout system
+│   ├── contentful-rich-text.js
+│   ├── header.js
+│   ├── footer.js
+│   └── ...
+├── templates/
+│   ├── project.js           # Project template
+│   └── blogPost.js          # Blog post template
+├── pages/
+│   ├── projects/
+│   ├── blog/
+│   └── ...
+└── utils/
+    └── textUtils.js         # Text formatting utilities
+```
 
-4.  **Learn more**
+## 🚀 Getting Started
 
-    - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+### Prerequisites
 
-    - [Tutorials](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+- Node.js (v14 or later)
+- npm or yarn
+- Contentful account
 
-    - [Guides](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+### Environment Variables
 
-    - [API Reference](https://www.gatsbyjs.com/docs/api-reference/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+Create a `.env` file with:
 
-    - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+```env
+CONTENTFUL_SPACE_ID=your_space_id
+CONTENTFUL_ACCESS_TOKEN=your_access_token
+```
 
-    - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+### Installation
 
-## 🚀 Quick start (Gatsby Cloud)
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/gatsby-contentful-portfolio.git
+```
 
-Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
+2. Install dependencies
+```bash
+npm install
+```
 
-[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-minimal)
+3. Start development server
+```bash
+npm run develop
+```
+
+## 📝 Content Management
+
+### Contentful Setup
+
+1. Create content types in Contentful:
+   - Base Content
+   - Text Section
+   - Image Section
+   - Media Section
+   - Project
+   - Blog Post
+
+2. Configure validations and default values:
+   - Layout options
+   - Width settings
+   - Alignment choices
+   - Column spans
+
+### Content Creation
+
+1. Create new content in Contentful
+2. Use the flexible layout system to arrange content
+3. Add media and rich text as needed
+4. Preview and publish
+
+## 🛠 Development
+
+### Branching Strategy
+
+- `main` - Production branch
+- `feature/*` - Feature development
+- `bugfix/*` - Bug fixes
+- `release/*` - Release preparation
+
+### Development Workflow
+
+1. Create feature branch
+```bash
+git checkout -b feature/your-feature
+```
+
+2. Make changes and commit
+```bash
+git commit -m "feat: your feature description"
+```
+
+3. Push and create pull request
+```bash
+git push origin feature/your-feature
+```
+
+## 📱 Responsive Design
+
+The site is built with a mobile-first approach and includes:
+
+- Responsive images
+- Flexible layouts
+- Mobile-optimized navigation
+- Touch-friendly interfaces
+
+## 🎯 Performance
+
+- Optimized images with Gatsby Image
+- Code splitting
+- Lazy loading
+- SEO optimization
+- Fast page loads
+
+## 🔧 Configuration
+
+### Gatsby Config
+
+```javascript
+// gatsby-config.js
+module.exports = {
+  plugins: [
+    'gatsby-plugin-image',
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp',
+    {
+      resolve: 'gatsby-source-contentful',
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+      },
+    },
+  ],
+}
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👥 Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📞 Contact
+
+Jeroen Kortekaas - [@bluecarabiner](https://instagram.com/bluecarabiner)
+
+Project Link: [https://github.com/yourusername/gatsby-contentful-portfolio](https://github.com/yourusername/gatsby-contentful-portfolio)
