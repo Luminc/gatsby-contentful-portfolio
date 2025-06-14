@@ -89,4 +89,25 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       },
     });
   });
+
+  // Add new query for Flexible Content
+  const flexibleResult = await graphql(`
+    query {
+      allContentfulFlexibleContent {
+        nodes {
+          id
+          slug
+        }
+      }
+    }
+  `);
+
+  // Create pages for new flexible content
+  flexibleResult.data.allContentfulFlexibleContent.nodes.forEach(node => {
+    createPage({
+      path: `/content/${node.slug}`,
+      component: require.resolve('./src/templates/flexibleContent.js'),
+      context: { id: node.id },
+    });
+  });
 };
